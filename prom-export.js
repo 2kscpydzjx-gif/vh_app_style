@@ -8,7 +8,7 @@
  async function make(){
   await ready();
   const client=window.supabase.createClient(window.VH_CONFIG.supabaseUrl,window.VH_CONFIG.supabaseKey);
-  const {data:ps,error}=await client.from('products').select('*').eq('status','published').gt('stock',0).order('created_at',{ascending:false}).limit(3);
+  const {data:ps,error}=await client.from('products').select('*').eq('status','published').gt('stock',0).gt('price',0).order('created_at',{ascending:false}).limit(3);
   if(error)throw error;if(!ps?.length)throw new Error('Не знайдено published товарів у наявності');
   const ids=ps.map(p=>p.id);
   const [{data:cats,error:ce},{data:subs,error:se},{data:imgs,error:ie}]=await Promise.all([
