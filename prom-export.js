@@ -20,9 +20,9 @@
   const cm=new Map((cats||[]).map(x=>[x.id,x.name])),sm=new Map((subs||[]).map(x=>[x.id,x.name]));
   const groups=new Map(),groupIds=new Map();let gid=1;
   for(const p of ps){const group=sm.get(p.subcategory_id)||cm.get(p.category_id)||'Vintage Hedonista';if(!groupIds.has(group))groupIds.set(group,gid++);groups.set(p.id,group)}
-  const lines=['<?xml version="1.0" encoding="UTF-8"?>','<shop>','  <catalog>'];
+  const lines=['<?xml version="1.0" encoding="UTF-8"?>','<shop>','  <categories>'];
   for(const [name,id] of groupIds)lines.push(`    <category id="${id}">${escXml(name)}</category>`);
-  lines.push('  </catalog>','  <items>');
+  lines.push('  </categories>','  <offers>');
   for(const p of ps){
    const pics=(imgs||[]).filter(x=>x.product_id===p.id).sort((a,b)=>(b.is_cover?1:0)-(a.is_cover?1:0)||(a.sort_order??0)-(b.sort_order??0)).map(x=>x.image_url).filter(Boolean);
    if(p.cover_image&&!pics.includes(p.cover_image))pics.unshift(p.cover_image);
@@ -36,9 +36,9 @@
    lines.push(`      <vendorCode>${escXml(p.slug||p.id)}</vendorCode>`);
    if(desc){lines.push(`      <description><![CDATA[${cdata(desc)}]]></description>`,`      <description_ua><![CDATA[${cdata(desc)}]]></description_ua>`)}
    [['Розмір',p.size],['Колір',p.color],['Матеріал',p.material],['Стан',p.condition],['Країна',p.country],['Сезон',p.season]].forEach(([n,v])=>{if(v)lines.push(`      <param name="${n}">${escXml(v)}</param>`)});
-   lines.push('    </item>');
+   lines.push('    </offer>');
   }
-  lines.push('  </items>','</shop>');
+  lines.push('  </offers>','</shop>');
   const blob=new Blob([lines.join('\n')],{type:'application/xml;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='prom-feed-test.xml';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
   alert('Готово: prom-feed-test.xml — '+ps.length+' товари');
  }
