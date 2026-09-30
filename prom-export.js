@@ -27,11 +27,11 @@
    const pics=(imgs||[]).filter(x=>x.product_id===p.id).sort((a,b)=>(b.is_cover?1:0)-(a.is_cover?1:0)||(a.sort_order??0)-(b.sort_order??0)).map(x=>x.image_url).filter(Boolean);
    if(p.cover_image&&!pics.includes(p.cover_image))pics.unshift(p.cover_image);
    const desc=val(p,'description','details_text'); const qty=Math.max(0,Number(p.stock)||0);
-   lines.push(`    <item id="${escXml(p.id)}" selling_type="r">`,
+   lines.push(`    <offer id="${escXml(p.id)}" available="true">`,
     `      <name>${escXml(p.name)}</name>`,`      <name_ua>${escXml(p.name)}</name_ua>`,
-    `      <categoryId>${groupIds.get(groups.get(p.id))}</categoryId>`,`      <priceuah>${Number(p.price)||0}</priceuah>`,
-    `      <available>${qty>0?'true':'false'}</available>`,`      <quantity_in_stock>${qty}</quantity_in_stock>`);
-   pics.slice(0,10).forEach(u=>lines.push(`      <image>${escXml(u)}</image>`));
+    `      <categoryId>${groupIds.get(groups.get(p.id))}</categoryId>`,`      <price>${Number(p.price)||0}</price>`,
+    `      <available>${qty>0?'true':'false'}</available>`,`      <currencyId>UAH</currencyId>`,`      <quantity_in_stock>${qty}</quantity_in_stock>`);
+   pics.slice(0,10).forEach(u=>lines.push(`      <picture>${escXml(u)}</picture>`));
    if(p.brand)lines.push(`      <vendor>${escXml(p.brand)}</vendor>`);
    lines.push(`      <vendorCode>${escXml(p.slug||p.id)}</vendorCode>`);
    if(desc){lines.push(`      <description><![CDATA[${cdata(desc)}]]></description>`,`      <description_ua><![CDATA[${cdata(desc)}]]></description_ua>`)}
