@@ -57,8 +57,16 @@ function aiReferenceProducts(){const priority={base:0,top:1,bottom:2,layer:3,sho
 async function generateLook(){
  if(!selected.length)return toast('Додай хоча б одну річ');if(isGeneratingLook)return;if(!db)return toast('Каталог ще завантажується');
  const references=aiReferenceProducts();if(!references.length)return toast('У вибраних товарів немає фото');const btn=$('#generateLook'),stage=$('.modelStage');
- try{isGeneratingLook=true;btn.disabled=true;btn.textContent='ГЕНЕРУЄМО ОБРАЗ…';stage?.classList.add('aiLoading');const{data,error}=await db.functions.invoke('generate-look',{body:{prompt:buildLookPrompt(),images:references.map(p=>p.cover_image)}});if(error)throw error;if(!data?.success||!data?.imageUrl)throw new Error(data?.error||'AI не повернув URL зображення');generatedLookImage=data.imageUrl;const preview=$('#lookPreview');if(preview)preview.src=generatedLookImage;toast('AI-образ готовий')}
- catch(e){console.error('generate-look',e);toast('Помилка AI-генерації')}finally{isGeneratingLook=false;btn.disabled=false;btn.textContent=generatedLookImage?'ЗГЕНЕРУВАТИ ЩЕ РАЗ ✦':'СТВОРИТИ ОБРАЗ НА МОДЕЛІ ✦';stage?.classList.remove('aiLoading')}
+ try{
+  isGeneratingLook=true;btn.disabled=true;btn.textContent='ГЕНЕРУЄМО ОБРАЗ…';stage?.classList.add('aiLoading');
+  const payload={prompt:buildLookPrompt(),images:references.map(p=>p.cover_image)};
+  const url=window.VH_CONFIG.supabaseUrl.replace(/\/$/,'')+'/functions/v1/generate-look';
+  const res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json','apikey':window.VH_CONFIG.supabaseKey,'Authorization':'Bearer '+window.VH_CONFIG.supabaseKey},body:JSON.stringify(payload)});
+  const raw=await res.text();let data;try{data=JSON.parse(raw)}catch{throw new Error('Edge Function returned HTTP '+res.status)}
+  if(!res.ok||!data?.success||!data?.imageUrl)throw new Error(data?.error||('AI HTTP '+res.status));
+  generatedLookImage=data.imageUrl;const preview=$('#lookPreview');if(preview)preview.src=generatedLookImage;toast('AI-образ готовий');
+ }catch(e){console.error('generate-look',e);toast('Помилка AI: '+(e?.message||'невідома'))}
+ finally{isGeneratingLook=false;btn.disabled=false;btn.textContent=generatedLookImage?'ЗГЕНЕРУВАТИ ЩЕ РАЗ ✦':'СТВОРИТИ ОБРАЗ НА МОДЕЛІ ✦';stage?.classList.remove('aiLoading')}
 }
 $('#generateLook').onclick=generateLook;
 function savedLooks(){try{return JSON.parse(localStorage.getItem('vh-saved-looks')||'[]')}catch{return[]}}
