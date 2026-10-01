@@ -140,9 +140,15 @@ async function renderSaved(){
  const box=$('#savedList');if(!box)return;box.innerHTML='<div class="state">Завантаження…</div>';
  try{
   const looks=await loadSavedLooks();box.innerHTML='';if(!looks.length){box.innerHTML='<div class="state">Ще немає збережених стилізацій.</div>';return}
-  looks.forEach(l=>{const card=document.createElement('div');card.className='savedCard savedLookCard';card.innerHTML=`<img src="${esc(l.image_url||'assets/model/base-look.png')}" alt=""><div class="savedInfo"><span>ЗБЕРЕЖЕНА СТИЛІЗАЦІЯ</span><b>${esc(l.name)}</b><small>${Number(l.item_count)||0} речей · ${money(l.total)}</small><div class="savedActions"><button class="renameSaved">ЗМІНИТИ НАЗВУ</button><i>·</i><button class="deleteSaved">ВИДАЛИТИ</button></div></div>`;
-   card.addEventListener('click',e=>{if(e.target.closest('.savedActions'))return;openSavedLook(l)});card.querySelector('.renameSaved').onclick=async()=>{const n=prompt('Назва стилізації:',l.name);if(!n?.trim())return;const{error}=await db.from('saved_looks').update({name:n.trim()}).eq('id',l.id);if(error)return toast('Не вдалося перейменувати');renderSaved()};
-   card.querySelector('.deleteSaved').onclick=async()=>{if(!confirm('Видалити цю стилізацію?'))return;const{error}=await db.from('saved_looks').delete().eq('id',l.id);if(error)return toast('Не вдалося видалити');renderSaved()};box.appendChild(card)
+  looks.forEach(l=>{
+   const card=document.createElement('article');card.className='savedLookCard';
+   card.innerHTML=`<button class="savedLookOpen" aria-label="Відкрити ${esc(l.name)}"><div class="savedLookVisual"><img src="${esc(l.image_url||'assets/model/base-look.png')}" alt=""><span>ЗБЕРЕЖЕНИЙ ОБРАЗ</span></div><div class="savedLookInfo"><b>${esc(l.name)}</b><small>${Number(l.item_count)||0} речей · ${money(l.total)}</small></div></button><button class="savedLookMenu" aria-label="Меню стилізації">•••</button><div class="savedLookMenuBox" hidden><button class="renameSaved">ЗМІНИТИ НАЗВУ</button><button class="deleteSaved">ВИДАЛИТИ</button></div>`;
+   card.querySelector('.savedLookOpen').onclick=()=>openSavedLook(l);
+   const menu=card.querySelector('.savedLookMenuBox');
+   card.querySelector('.savedLookMenu').onclick=e=>{e.stopPropagation();document.querySelectorAll('.savedLookMenuBox').forEach(x=>{if(x!==menu)x.hidden=true});menu.hidden=!menu.hidden};
+   card.querySelector('.renameSaved').onclick=async()=>{const n=prompt('Назва стилізації:',l.name);if(!n?.trim())return;const{error}=await db.from('saved_looks').update({name:n.trim()}).eq('id',l.id);if(error)return toast('Не вдалося перейменувати');renderSaved()};
+   card.querySelector('.deleteSaved').onclick=async()=>{if(!confirm('Видалити цю стилізацію?'))return;const{error}=await db.from('saved_looks').delete().eq('id',l.id);if(error)return toast('Не вдалося видалити');renderSaved()};
+   box.appendChild(card)
   })
  }catch(e){console.error('saved-looks',e);box.innerHTML='<div class="state">Помилка завантаження збережених стилізацій.</div>'}
 }
