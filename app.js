@@ -109,12 +109,34 @@ async function generateLook(){
  finally{isGeneratingLook=false;btn.disabled=false;btn.textContent=generatedLookImage?'ЗГЕНЕРУВАТИ ЩЕ РАЗ ✦':'СТВОРИТИ ОБРАЗ НА МОДЕЛІ ✦';stage?.classList.remove('aiLoading')}
 }
 $('#generateLook').onclick=generateLook;
-function savedLooks(){try{return JSON.parse(localStorage.getItem('vh-saved-looks')||'[]')}catch{return[]}}
+let savedLooksCache=[];
+async function loadSavedLooks(){
+ if(!db)return [];
+ const {data,error}=await db.from('saved_looks').select('id,name,product_ids,item_count,total,image_url,created_at,updated_at').order('created_at',{ascending:false});
+ if(error)throw error;savedLooksCache=data||[];return savedLooksCache
+}
 function openSaveModal(){if(!selected.length)return toast('Образ порожній');$('#lookNameInput').value='';$('#nameModal').classList.add('show');setTimeout(()=>$('#lookNameInput').focus(),50)}
 function closeSaveModal(){$('#nameModal').classList.remove('show')}
 $('#saveLook').onclick=openSaveModal;$('#cancelSave').onclick=closeSaveModal;$('#nameModalBackdrop').onclick=closeSaveModal;
-$('#confirmSave').onclick=()=>{const name=$('#lookNameInput').value.trim();if(!name)return toast('Напиши назву стилізації');const looks=savedLooks();looks.unshift({id:Date.now(),name,ids:selected.map(x=>x.id),count:selected.length,total:selected.reduce((a,p)=>a+Number(p.price||0),0),image:generatedLookImage||null});localStorage.setItem('vh-saved-looks',JSON.stringify(looks));selected=[];generatedLookImage=null;localStorage.setItem('vh-current-look','[]');closeSaveModal();renderCatalog();toast('Стилізацію збережено');setTimeout(()=>go('saved'),300)};
-function renderSaved(){const looks=savedLooks(),box=$('#savedList');box.innerHTML='';if(!looks.length){box.innerHTML='<div class="state">Ще немає збережених стилізацій.</div>';return}looks.forEach((l,index)=>{const card=document.createElement('div');card.className='savedCard savedLookCard';card.innerHTML=`<img src="${esc(l.image||'assets/model/base-look.png')}" alt=""><div class="savedInfo"><span>ЗБЕРЕЖЕНА СТИЛІЗАЦІЯ</span><b>${esc(l.name)}</b><small>${l.count} речей · ${money(l.total)}</small><div class="savedActions"><button class="renameSaved">ЗМІНИТИ НАЗВУ</button><i>·</i><button class="deleteSaved">ВИДАЛИТИ</button></div></div>`;card.querySelector('.renameSaved').onclick=()=>{const n=prompt('Назва стилізації:',l.name);if(n&&n.trim()){l.name=n.trim();localStorage.setItem('vh-saved-looks',JSON.stringify(looks));renderSaved()}};card.querySelector('.deleteSaved').onclick=()=>{if(!confirm('Видалити цю стилізацію?'))return;looks.splice(index,1);localStorage.setItem('vh-saved-looks',JSON.stringify(looks));renderSaved()};box.appendChild(card)})}
+$('#confirmSave').onclick=async()=>{
+ const name=$('#lookNameInput').value.trim();if(!name)return toast('Напиши назву стилізації');
+ const btn=$('#confirmSave');btn.disabled=true;
+ try{
+  const payload={name,product_ids:selected.map(x=>x.id),item_count:selected.length,total:selected.reduce((a,p)=>a+Number(p.price||0),0),image_url:generatedLookImage||null};
+  const {error}=await db.from('saved_looks').insert(payload);if(error)throw error;
+  selected=[];generatedLookImage=null;localStorage.setItem('vh-current-look','[]');closeSaveModal();updateSelectionUI();toast('Стилізацію збережено');setTimeout(()=>go('saved'),250)
+ }catch(e){console.error('save-look',e);toast('Не вдалося зберегти: '+(e?.message||'помилка'))}finally{btn.disabled=false}
+};
+async function renderSaved(){
+ const box=$('#savedList');if(!box)return;box.innerHTML='<div class="state">Завантаження…</div>';
+ try{
+  const looks=await loadSavedLooks();box.innerHTML='';if(!looks.length){box.innerHTML='<div class="state">Ще немає збережених стилізацій.</div>';return}
+  looks.forEach(l=>{const card=document.createElement('div');card.className='savedCard savedLookCard';card.innerHTML=`<img src="${esc(l.image_url||'assets/model/base-look.png')}" alt=""><div class="savedInfo"><span>ЗБЕРЕЖЕНА СТИЛІЗАЦІЯ</span><b>${esc(l.name)}</b><small>${Number(l.item_count)||0} речей · ${money(l.total)}</small><div class="savedActions"><button class="renameSaved">ЗМІНИТИ НАЗВУ</button><i>·</i><button class="deleteSaved">ВИДАЛИТИ</button></div></div>`;
+   card.querySelector('.renameSaved').onclick=async()=>{const n=prompt('Назва стилізації:',l.name);if(!n?.trim())return;const{error}=await db.from('saved_looks').update({name:n.trim()}).eq('id',l.id);if(error)return toast('Не вдалося перейменувати');renderSaved()};
+   card.querySelector('.deleteSaved').onclick=async()=>{if(!confirm('Видалити цю стилізацію?'))return;const{error}=await db.from('saved_looks').delete().eq('id',l.id);if(error)return toast('Не вдалося видалити');renderSaved()};box.appendChild(card)
+  })
+ }catch(e){console.error('saved-looks',e);box.innerHTML='<div class="state">Помилка завантаження збережених стилізацій.</div>'}
+}
 async function allProducts(){let out=[],from=0,size=1000;while(true){const{data,error}=await db.from('products').select('id,name,slug,price,old_price,category_id,subcategory_id,size,color,material,condition,brand,status,stock,cover_image,created_at').eq('status','published').order('created_at',{ascending:false}).range(from,from+size-1);if(error)throw error;out.push(...(data||[]));if((data||[]).length<size)break;from+=size}return out}
 async function load(){try{const cfg=window.VH_CONFIG;if(!cfg?.supabaseUrl||!cfg?.supabaseKey||!window.supabase)throw new Error('Не знайдено конфігурацію Supabase');db=window.supabase.createClient(cfg.supabaseUrl,cfg.supabaseKey);const[c,s,p]=await Promise.all([db.from('categories').select('id,name,slug,sort_order,is_active').eq('is_active',true).order('sort_order'),db.from('subcategories').select('id,category_id,name,slug,sort_order').order('sort_order'),allProducts()]);if(c.error)throw c.error;if(s.error)throw s.error;categories=c.data||[];subcategories=s.data||[];products=p||[];restore();renderCatalog()}catch(e){console.error(e);$('#productGrid').innerHTML=`<div class="state">Помилка завантаження:<br>${esc(e.message)}</div>`;toast('Не вдалося завантажити каталог')}}
 load();
