@@ -76,11 +76,12 @@ function applyCatalogSearch(){
   });
 }
 catalogSearchInput?.addEventListener('input',applyCatalogSearch);
-$('#catalogFilterBtn')?.addEventListener('click',()=>{
-  const builder=$('#builder');if(!builder)return;
-  builder.classList.toggle('filtersCollapsed');
-  const btn=$('#catalogFilterBtn');if(btn)btn.classList.toggle('active',!builder.classList.contains('filtersCollapsed'));
-});
+function openCatalogSheet(){$('#catalogSheet')?.classList.add('show');$('#catalogSheet')?.setAttribute('aria-hidden','false');document.body.classList.add('sheetOpen')}
+function closeCatalogSheet(){$('#catalogSheet')?.classList.remove('show');$('#catalogSheet')?.setAttribute('aria-hidden','true');document.body.classList.remove('sheetOpen')}
+$('#catalogFilterBtn')?.addEventListener('click',openCatalogSheet);
+$('#catalogSheetClose')?.addEventListener('click',closeCatalogSheet);
+$('#catalogSheetBackdrop')?.addEventListener('click',closeCatalogSheet);
+$('#catalogSheetApply')?.addEventListener('click',closeCatalogSheet);
 
 function renderLook(){
  const lookCount=$('#lookCount');if(lookCount)lookCount.textContent=selected.length;
