@@ -28,7 +28,15 @@ function addProduct(p){
  else if(['layer','shoes','bag'].includes(role)) selected=selected.filter(x=>roleFor(x)!==role);
  selected.push(p);sync();
 }
-function sync(){localStorage.setItem('vh-current-look',JSON.stringify(selected.map(x=>x.id)));generatedLookImage=null;renderCatalog({preserveScroll:true})}
+function sync(){localStorage.setItem('vh-current-look',JSON.stringify(selected.map(x=>x.id)));generatedLookImage=null;updateSelectionUI()}
+function updateSelectionUI(){
+ document.querySelectorAll('#productGrid .product').forEach(card=>{
+  const id=card.dataset.productId,chosen=selected.some(x=>x.id===id),check=card.querySelector('.check');
+  card.classList.toggle('selected',chosen);if(check)check.textContent=chosen?'ДОДАНО ✓':'ДОДАТИ ДО ОБРАЗУ';
+ });
+ const selectedCount=$('#selectedCount');if(selectedCount)selectedCount.textContent=selected.length;
+ document.querySelector('.builderDock')?.classList.toggle('visible',selected.length>0);
+}
 function restore(){try{const ids=JSON.parse(localStorage.getItem('vh-current-look')||'[]');selected=ids.map(id=>products.find(p=>p.id===id)).filter(Boolean)}catch{}}
 function filtered(){return products.filter(p=>activeSubcategoryId?p.subcategory_id===activeSubcategoryId:activeCategoryId?p.category_id===activeCategoryId:true)}
 function renderCategories(){const box=$('#categoryTabs');box.innerHTML='';[{id:null,name:'УСІ'},...categories].forEach(c=>{const b=document.createElement('button');b.textContent=c.name.toUpperCase();b.className=activeCategoryId===c.id?'active':'';b.onclick=()=>{activeCategoryId=c.id;activeSubcategoryId=null;renderCatalog()};box.appendChild(b)})}
@@ -39,7 +47,7 @@ function renderProducts(){
  const sectionTitle=$('#sectionTitle');if(sectionTitle)sectionTitle.textContent=(sub?.name||cat?.name||'Усі товари').toUpperCase();const catalogMeta=$('#catalogMeta');if(catalogMeta)catalogMeta.textContent=`${list.length} товарів`;
  if(!list.length){grid.innerHTML='<div class="state">У цьому розділі поки немає товарів.</div>';return}
  list.forEach(p=>{const chosen=selected.some(x=>x.id===p.id),b=document.createElement('button');b.className='product '+(chosen?'selected ':'')+(sold(p)?'sold':'');
- b.innerHTML=`<div class="image"><img loading="lazy" src="${esc(img(p))}" alt="${esc(p.name)}">${sold(p)?'<span class="soldBadge">ПРОДАНО</span>':''}<span class="check">${chosen?'ДОДАНО ✓':'ДОДАТИ ДО ОБРАЗУ'}</span></div><b>${esc(p.name)}</b><small>${money(p.price)}</small>${p.brand?`<em>${esc(p.brand)}</em>`:''}`;
+ b.dataset.productId=p.id;b.innerHTML=`<div class="image"><img loading="lazy" src="${esc(img(p))}" alt="${esc(p.name)}">${sold(p)?'<span class="soldBadge">ПРОДАНО</span>':''}<span class="check">${chosen?'ДОДАНО ✓':'ДОДАТИ ДО ОБРАЗУ'}</span></div><b>${esc(p.name)}</b><small>${money(p.price)}</small>${p.brand?`<em>${esc(p.brand)}</em>`:''}`;
  const quickAdd=b.querySelector('.check');quickAdd?.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();addProduct(p)});b.onclick=e=>{if(e.target.closest('.check'))return;openProductDetail(p)};grid.appendChild(b)})
 }
 function openProductDetail(p){
