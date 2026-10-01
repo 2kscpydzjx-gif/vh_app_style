@@ -36,7 +36,7 @@ function renderSubs(){const box=$('#subcategoryTabs');box.innerHTML='';if(!activ
 function renderProducts(){
  const list=filtered(),grid=$('#productGrid');grid.innerHTML='';
  const cat=categories.find(c=>c.id===activeCategoryId),sub=subcategories.find(s=>s.id===activeSubcategoryId);
- $('#sectionTitle').textContent=(sub?.name||cat?.name||'Усі товари').toUpperCase();$('#catalogMeta').textContent=`${list.length} товарів`;
+ $('#sectionTitle').textContent=(sub?.name||cat?.name||'Усі товари').toUpperCase();const catalogMeta=$('#catalogMeta');if(catalogMeta)catalogMeta.textContent=`${list.length} товарів`;
  if(!list.length){grid.innerHTML='<div class="state">У цьому розділі поки немає товарів.</div>';return}
  list.forEach(p=>{const chosen=selected.some(x=>x.id===p.id),b=document.createElement('button');b.className='product '+(chosen?'selected ':'')+(sold(p)?'sold':'');
  b.innerHTML=`<div class="image"><img loading="lazy" src="${esc(img(p))}" alt="${esc(p.name)}">${sold(p)?'<span class="soldBadge">ПРОДАНО</span>':''}<span class="check">${chosen?'ДОДАНО ✓':'ДОДАТИ ДО ОБРАЗУ'}</span></div><b>${esc(p.name)}</b><small>${money(p.price)}</small>${p.brand?`<em>${esc(p.brand)}</em>`:''}`;
