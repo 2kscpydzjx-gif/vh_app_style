@@ -135,3 +135,17 @@ button,.product,.savedLookCard,.savedDetailItem{-webkit-tap-highlight-color:tran
 /* Look actions belong to document flow: visible only after scrolling past generation block */
 #look{padding-bottom:18px!important}
 .lookAppScreen .lookActions{position:relative!important;bottom:auto!important;z-index:1!important;margin:12px 10px 18px!important}
+
+/* Saved looks — editorial app gallery */
+.savedGalleryScreen{padding:0 12px 24px!important;background:#120a07}
+.savedGalleryHead{position:sticky;top:0;z-index:20;margin:0 -12px;padding:18px 16px 14px;background:rgba(18,10,7,.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(196,160,113,.14)}
+.savedGalleryHead>span{font:8px/1 Arial,sans-serif;letter-spacing:.2em;color:#c4a071}.savedGalleryHead h2{margin:6px 0 3px;font:400 27px/1 Georgia,serif}.savedGalleryHead p{margin:0;color:#927b69;font:10px/1.4 Georgia,serif}
+.savedGallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 10px;margin-top:14px}
+.savedLookCard{position:relative;min-width:0;background:#1a0f0a;border:1px solid rgba(196,160,113,.16);border-radius:12px;overflow:visible}
+.savedLookOpen{display:block;width:100%;padding:0;border:0;background:none;color:#eadfce;text-align:left}
+.savedLookVisual{position:relative;overflow:hidden;border-radius:11px 11px 0 0;background:#21140e;aspect-ratio:3/4}.savedLookVisual img{display:block;width:100%;height:100%;object-fit:cover}.savedLookVisual>span{position:absolute;left:8px;bottom:8px;padding:5px 6px;background:rgba(18,10,7,.76);border:1px solid rgba(196,160,113,.32);font:6px/1 Arial,sans-serif;letter-spacing:.12em;color:#dcc5aa}
+.savedLookInfo{padding:10px 34px 11px 10px;min-height:60px}.savedLookInfo b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:400 15px/1.15 Georgia,serif}.savedLookInfo small{display:block;margin-top:5px;color:#a48d79;font:8px/1.2 Arial,sans-serif;letter-spacing:.03em}
+.savedLookMenu{position:absolute;right:5px;bottom:13px;width:30px;height:30px;padding:0;border:0;background:none;color:#bda58e;font:14px/1 Arial,sans-serif;letter-spacing:1px;z-index:3}
+.savedLookMenuBox{position:absolute;right:6px;bottom:43px;z-index:12;width:128px;padding:5px;background:#24150e;border:1px solid rgba(196,160,113,.32);border-radius:9px;box-shadow:0 12px 28px rgba(0,0,0,.45)}.savedLookMenuBox[hidden]{display:none!important}.savedLookMenuBox button{display:block;width:100%;padding:10px 8px;border:0;background:none;color:#d8c4af;text-align:left;font:7px/1 Arial,sans-serif;letter-spacing:.08em}.savedLookMenuBox .deleteSaved{color:#c89272;border-top:1px solid rgba(196,160,113,.14)}
+.savedGalleryCreate{margin:18px 0 4px}.savedGalleryCreate .btn{height:46px!important}
+@media(min-width:430px){.savedGallery{gap:14px 12px}}
