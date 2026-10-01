@@ -66,3 +66,7 @@ button{-webkit-tap-highlight-color:transparent}
 
 /* Global brand bar removed */
 .app{grid-template-rows:minmax(0,1fr) auto!important}
+
+/* Compact catalog quick-add */
+.product .image .check{left:50%!important;right:auto!important;bottom:8px!important;width:auto!important;min-width:0!important;min-height:34px!important;padding:0 11px!important;transform:translateX(-50%)!important;border-radius:999px!important;white-space:nowrap!important;font-size:8px!important;line-height:1!important;background:rgba(24,14,9,.88)!important;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.product.selected .image .check{padding:0 10px!important}
