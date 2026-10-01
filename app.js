@@ -4,8 +4,8 @@ let generatedLookImage=null,isGeneratingLook=false;
 const money=v=>`${new Intl.NumberFormat('uk-UA').format(Number(v||0))} грн`;
 const esc=v=>String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
 function toast(t){const e=$('#toast');if(!e){console.warn('Toast:',t);return}e.textContent=t;e.classList.add('show');clearTimeout(window.__t);window.__t=setTimeout(()=>e.classList.remove('show'),1800)}
-function go(id){$$('.screen').forEach(x=>x.classList.toggle('active',x.id===id));$$('nav [data-go]').forEach(x=>x.classList.toggle('active',x.dataset.go===id));window.scrollTo(0,0);if(id==='look'){renderLook();document.querySelector('#look').classList.toggle('isEmpty',selected.length===0);}if(id==='saved')renderSaved()}
-$$('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));$('#back')?.addEventListener('click',()=>go('home'));$('#menu')?.addEventListener('click',()=>toast('Vintage Hedonista Style Lab'));
+function go(id){document.querySelectorAll('.screen').forEach(x=>x.classList.toggle('active',x.id===id));document.querySelectorAll('nav [data-go]').forEach(x=>x.classList.toggle('active',x.dataset.go===id));window.scrollTo(0,0);if(id==='look'){renderLook();document.querySelector('#look').classList.toggle('isEmpty',selected.length===0);}if(id==='saved')renderSaved()}
+document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));$('#back')?.addEventListener('click',()=>go('home'));$('#menu')?.addEventListener('click',()=>toast('Vintage Hedonista Style Lab'));
 const img=p=>p?.cover_image||'assets/model/base-look.png', sold=p=>Number(p.stock||0)<=0;
 function roleFor(p){
  const cat=(categories.find(x=>x.id===p.category_id)?.slug||'').toLowerCase();
