@@ -113,8 +113,8 @@ async function loadSavedLooks(){
  const {data,error}=await db.from('saved_looks').select('id,name,product_ids,item_count,total,image_url,created_at,updated_at').order('created_at',{ascending:false});
  if(error)throw error;savedLooksCache=data||[];return savedLooksCache
 }
-function openSaveModal(){if(!selected.length)return toast('Образ порожній');$('#lookNameInput').value='';$('#nameModal').classList.add('show');setTimeout(()=>$('#lookNameInput').focus(),50)}
-function closeSaveModal(){$('#nameModal').classList.remove('show')}
+function openSaveModal(){if(!selected.length)return toast('Образ порожній');$('#lookNameInput').value='';$('#nameModal').classList.add('show');$('#nameModal').setAttribute('aria-hidden','false');document.body.classList.add('sheetOpen');setTimeout(()=>$('#lookNameInput').focus(),180)}
+function closeSaveModal(){$('#nameModal').classList.remove('show');$('#nameModal').setAttribute('aria-hidden','true');document.body.classList.remove('sheetOpen')}
 $('#saveLook').onclick=openSaveModal;$('#cancelSave').onclick=closeSaveModal;$('#nameModalBackdrop').onclick=closeSaveModal;
 $('#confirmSave').onclick=async()=>{
  const name=$('#lookNameInput').value.trim();if(!name)return toast('Напиши назву стилізації');
