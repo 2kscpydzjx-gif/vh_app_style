@@ -3,7 +3,7 @@ let db=null,categories=[],subcategories=[],products=[],selected=[],activeCategor
 let generatedLookImage=null,isGeneratingLook=false;
 const money=v=>`${new Intl.NumberFormat('uk-UA').format(Number(v||0))} грн`;
 const esc=v=>String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
-function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('show');clearTimeout(window.__t);window.__t=setTimeout(()=>e.classList.remove('show'),1800)}
+function toast(t){const e=$('#toast');if(!e){console.warn('Toast:',t);return}e.textContent=t;e.classList.add('show');clearTimeout(window.__t);window.__t=setTimeout(()=>e.classList.remove('show'),1800)}
 function go(id){$$('.screen').forEach(x=>x.classList.toggle('active',x.id===id));$$('nav [data-go]').forEach(x=>x.classList.toggle('active',x.dataset.go===id));window.scrollTo(0,0);if(id==='look'){renderLook();document.querySelector('#look').classList.toggle('isEmpty',selected.length===0);}if(id==='saved')renderSaved()}
 $$('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));$('#back')?.addEventListener('click',()=>go('home'));$('#menu')?.addEventListener('click',()=>toast('Vintage Hedonista Style Lab'));
 const img=p=>p?.cover_image||'assets/model/base-look.png', sold=p=>Number(p.stock||0)<=0;
@@ -36,13 +36,13 @@ function renderSubs(){const box=$('#subcategoryTabs');box.innerHTML='';if(!activ
 function renderProducts(){
  const list=filtered(),grid=$('#productGrid');grid.innerHTML='';
  const cat=categories.find(c=>c.id===activeCategoryId),sub=subcategories.find(s=>s.id===activeSubcategoryId);
- $('#sectionTitle').textContent=(sub?.name||cat?.name||'Усі товари').toUpperCase();const catalogMeta=$('#catalogMeta');if(catalogMeta)catalogMeta.textContent=`${list.length} товарів`;
+ const sectionTitle=$('#sectionTitle');if(sectionTitle)sectionTitle.textContent=(sub?.name||cat?.name||'Усі товари').toUpperCase();const catalogMeta=$('#catalogMeta');if(catalogMeta)catalogMeta.textContent=`${list.length} товарів`;
  if(!list.length){grid.innerHTML='<div class="state">У цьому розділі поки немає товарів.</div>';return}
  list.forEach(p=>{const chosen=selected.some(x=>x.id===p.id),b=document.createElement('button');b.className='product '+(chosen?'selected ':'')+(sold(p)?'sold':'');
  b.innerHTML=`<div class="image"><img loading="lazy" src="${esc(img(p))}" alt="${esc(p.name)}">${sold(p)?'<span class="soldBadge">ПРОДАНО</span>':''}<span class="check">${chosen?'ДОДАНО ✓':'ДОДАТИ ДО ОБРАЗУ'}</span></div><b>${esc(p.name)}</b><small>${money(p.price)}</small>${p.brand?`<em>${esc(p.brand)}</em>`:''}`;
  b.onclick=()=>addProduct(p);grid.appendChild(b)})
 }
-function renderCatalog(){renderCategories();renderSubs();renderProducts();$('#selectedCount').textContent=selected.length;const dock=document.querySelector('.builderDock');if(dock)dock.classList.toggle('visible',selected.length>0)}
+function renderCatalog(){renderCategories();renderSubs();renderProducts();const selectedCount=$('#selectedCount');if(selectedCount)selectedCount.textContent=selected.length;const dock=document.querySelector('.builderDock');if(dock)dock.classList.toggle('visible',selected.length>0)}
 $('#clearFilter').onclick=()=>{activeCategoryId=null;activeSubcategoryId=null;renderCatalog()};
 $('#openLook').onclick=()=>selected.length?go('look'):toast('Додай хоча б одну річ');
 
@@ -59,8 +59,8 @@ if(catalogSearchInput){
 $('#catalogFilterBtn')?.addEventListener('click',()=>$('#builder')?.classList.toggle('filtersCollapsed'));
 
 function renderLook(){
- $('#lookCount').textContent=selected.length;
- const preview=$('#lookPreview');if(preview)preview.src=generatedLookImage||'assets/model/base-look.png';$('#lookTotal').textContent=money(selected.reduce((a,p)=>a+Number(p.price||0),0));
+ const lookCount=$('#lookCount');if(lookCount)lookCount.textContent=selected.length;
+ const preview=$('#lookPreview');if(preview)preview.src=generatedLookImage||'assets/model/base-look.png';const lookTotal=$('#lookTotal');if(lookTotal)lookTotal.textContent=money(selected.reduce((a,p)=>a+Number(p.price||0),0));
  const box=$('#lookItems');box.innerHTML='';
  if(!selected.length){box.innerHTML='<div class="state">Образ порожній. Додай речі з каталогу.</div>';return}
  selected.forEach(p=>{const cat=categories.find(c=>c.id===p.category_id),sub=subcategories.find(s=>s.id===p.subcategory_id);const row=document.createElement('div');row.className='lookRow';row.innerHTML=`<img src="${esc(img(p))}"><div><span>${esc(sub?.name||cat?.name||'Товар')}</span><b>${esc(p.name)}</b><small>${money(p.price)} · ${sold(p)?'Продано':'В наявності'}</small></div><button>×</button>`;row.querySelector('button').onclick=()=>{selected=selected.filter(x=>x.id!==p.id);sync();renderLook()};box.appendChild(row)})
