@@ -45,6 +45,19 @@ function renderProducts(){
 function renderCatalog(){renderCategories();renderSubs();renderProducts();$('#selectedCount').textContent=selected.length;const dock=document.querySelector('.builderDock');if(dock)dock.classList.toggle('visible',selected.length>0)}
 $('#clearFilter').onclick=()=>{activeCategoryId=null;activeSubcategoryId=null;renderCatalog()};
 $('#openLook').onclick=()=>selected.length?go('look'):toast('Додай хоча б одну річ');
+
+const catalogSearchInput=$('#catalogSearchInput');
+if(catalogSearchInput){
+  catalogSearchInput.addEventListener('input',()=>{
+    const q=catalogSearchInput.value.trim().toLocaleLowerCase('uk-UA');
+    $('#productGrid .product').forEach(card=>{
+      const hay=(card.textContent||'').toLocaleLowerCase('uk-UA');
+      card.style.display=!q||hay.includes(q)?'':'none';
+    });
+  });
+}
+$('#catalogFilterBtn')?.addEventListener('click',()=>$('#builder')?.classList.toggle('filtersCollapsed'));
+
 function renderLook(){
  $('#lookCount').textContent=selected.length;
  const preview=$('#lookPreview');if(preview)preview.src=generatedLookImage||'assets/model/base-look.png';$('#lookTotal').textContent=money(selected.reduce((a,p)=>a+Number(p.price||0),0));
