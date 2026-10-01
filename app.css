@@ -119,3 +119,7 @@ button,.product,.savedLookCard,.savedDetailItem{-webkit-tap-highlight-color:tran
 /* Finish save sheet as a complete floating card */
 .nameModal{padding:0 12px calc(10px + env(safe-area-inset-bottom))!important;align-items:flex-end!important}
 .nameModalCard{width:min(406px,calc(100% - 24px))!important;margin:0 auto!important;border:1px solid rgba(196,160,113,.30)!important;border-radius:22px!important;padding:8px 16px 18px!important;overflow:hidden!important;box-shadow:0 18px 60px rgba(0,0,0,.48)!important}
+
+/* Save sheet visible bottom gap — explicit iPhone floating card */
+.nameModal.show{padding:12px!important;align-items:flex-end!important;justify-content:center!important}
+.nameModal.show .nameModalCard{position:relative!important;bottom:auto!important;width:100%!important;max-width:406px!important;margin:0 0 max(12px,env(safe-area-inset-bottom))!important;border:1px solid rgba(196,160,113,.38)!important;border-radius:22px!important;padding:8px 16px 18px!important;transform:translateY(0)!important}
