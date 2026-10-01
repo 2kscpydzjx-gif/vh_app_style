@@ -115,3 +115,7 @@ button,.product,.savedLookCard,.savedDetailItem{-webkit-tap-highlight-color:tran
 .lookRow{animation:vhRowIn .22s ease both}@keyframes vhRowIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
 .builderDock.visible{animation:vhDockIn .25s cubic-bezier(.22,.75,.25,1) both}@keyframes vhDockIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+/* Finish save sheet as a complete floating card */
+.nameModal{padding:0 12px calc(10px + env(safe-area-inset-bottom))!important;align-items:flex-end!important}
+.nameModalCard{width:min(406px,calc(100% - 24px))!important;margin:0 auto!important;border:1px solid rgba(196,160,113,.30)!important;border-radius:22px!important;padding:8px 16px 18px!important;overflow:hidden!important;box-shadow:0 18px 60px rgba(0,0,0,.48)!important}
