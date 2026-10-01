@@ -21,12 +21,9 @@ function roleFor(p){
  return'other';
 }
 function addProduct(p){
- const existing=selected.findIndex(x=>x.id===p.id);if(existing>=0){selected.splice(existing,1);sync();return}
- const role=roleFor(p);
- if(role==='base') selected=selected.filter(x=>!['base','top','bottom'].includes(roleFor(x)));
- else if(['top','bottom'].includes(role)) selected=selected.filter(x=>roleFor(x)!=='base'&&roleFor(x)!==role);
- else if(['layer','shoes','bag'].includes(role)) selected=selected.filter(x=>roleFor(x)!==role);
- selected.push(p);sync();
+ const existing=selected.findIndex(x=>x.id===p.id);
+ if(existing>=0)selected.splice(existing,1);else selected.push(p);
+ sync();
 }
 function sync(){localStorage.setItem('vh-current-look',JSON.stringify(selected.map(x=>x.id)));generatedLookImage=null;updateSelectionUI()}
 function updateSelectionUI(){
