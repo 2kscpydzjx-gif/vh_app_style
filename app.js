@@ -28,7 +28,7 @@ function addProduct(p){
  else if(['layer','shoes','bag'].includes(role)) selected=selected.filter(x=>roleFor(x)!==role);
  selected.push(p);sync();
 }
-function sync(){localStorage.setItem('vh-current-look',JSON.stringify(selected.map(x=>x.id)));generatedLookImage=null;renderCatalog()}
+function sync(){localStorage.setItem('vh-current-look',JSON.stringify(selected.map(x=>x.id)));generatedLookImage=null;renderCatalog({preserveScroll:true})}
 function restore(){try{const ids=JSON.parse(localStorage.getItem('vh-current-look')||'[]');selected=ids.map(id=>products.find(p=>p.id===id)).filter(Boolean)}catch{}}
 function filtered(){return products.filter(p=>activeSubcategoryId?p.subcategory_id===activeSubcategoryId:activeCategoryId?p.category_id===activeCategoryId:true)}
 function renderCategories(){const box=$('#categoryTabs');box.innerHTML='';[{id:null,name:'УСІ'},...categories].forEach(c=>{const b=document.createElement('button');b.textContent=c.name.toUpperCase();b.className=activeCategoryId===c.id?'active':'';b.onclick=()=>{activeCategoryId=c.id;activeSubcategoryId=null;renderCatalog()};box.appendChild(b)})}
@@ -42,21 +42,24 @@ function renderProducts(){
  b.innerHTML=`<div class="image"><img loading="lazy" src="${esc(img(p))}" alt="${esc(p.name)}">${sold(p)?'<span class="soldBadge">ПРОДАНО</span>':''}<span class="check">${chosen?'ДОДАНО ✓':'ДОДАТИ ДО ОБРАЗУ'}</span></div><b>${esc(p.name)}</b><small>${money(p.price)}</small>${p.brand?`<em>${esc(p.brand)}</em>`:''}`;
  b.onclick=()=>addProduct(p);grid.appendChild(b)})
 }
-function renderCatalog(){renderCategories();renderSubs();renderProducts();const selectedCount=$('#selectedCount');if(selectedCount)selectedCount.textContent=selected.length;const dock=document.querySelector('.builderDock');if(dock)dock.classList.toggle('visible',selected.length>0)}
+function renderCatalog(opts={}){const builder=$('#builder'),scroll=builder?.scrollTop||0;renderCategories();renderSubs();renderProducts();applyCatalogSearch();const selectedCount=$('#selectedCount');if(selectedCount)selectedCount.textContent=selected.length;const dock=document.querySelector('.builderDock');if(dock)dock.classList.toggle('visible',selected.length>0);if(opts.preserveScroll&&builder)requestAnimationFrame(()=>builder.scrollTop=scroll)}
 $('#clearFilter').onclick=()=>{activeCategoryId=null;activeSubcategoryId=null;renderCatalog()};
 $('#openLook').onclick=()=>selected.length?go('look'):toast('Додай хоча б одну річ');
 
 const catalogSearchInput=$('#catalogSearchInput');
-if(catalogSearchInput){
-  catalogSearchInput.addEventListener('input',()=>{
-    const q=catalogSearchInput.value.trim().toLocaleLowerCase('uk-UA');
-    $('#productGrid .product').forEach(card=>{
-      const hay=(card.textContent||'').toLocaleLowerCase('uk-UA');
-      card.style.display=!q||hay.includes(q)?'':'none';
-    });
+function applyCatalogSearch(){
+  const q=(catalogSearchInput?.value||'').trim().toLocaleLowerCase('uk-UA');
+  $('#productGrid .product').forEach(card=>{
+    const hay=(card.textContent||'').toLocaleLowerCase('uk-UA');
+    card.hidden=!!q&&!hay.includes(q);
   });
 }
-$('#catalogFilterBtn')?.addEventListener('click',()=>$('#builder')?.classList.toggle('filtersCollapsed'));
+catalogSearchInput?.addEventListener('input',applyCatalogSearch);
+$('#catalogFilterBtn')?.addEventListener('click',()=>{
+  const builder=$('#builder');if(!builder)return;
+  builder.classList.toggle('filtersCollapsed');
+  const btn=$('#catalogFilterBtn');if(btn)btn.classList.toggle('active',!builder.classList.contains('filtersCollapsed'));
+});
 
 function renderLook(){
  const lookCount=$('#lookCount');if(lookCount)lookCount.textContent=selected.length;
