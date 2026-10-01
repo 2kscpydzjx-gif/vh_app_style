@@ -63,3 +63,6 @@ button{-webkit-tap-highlight-color:transparent}
 
 /* Mobile quick-add: whole visible CTA is the touch target */
 .product .image .check{display:flex!important;align-items:center;justify-content:center;box-sizing:border-box;min-height:44px!important;left:8px!important;right:8px!important;width:auto!important;z-index:12!important;pointer-events:auto!important;touch-action:manipulation;cursor:pointer;-webkit-tap-highlight-color:transparent}
+
+/* Global brand bar removed */
+.app{grid-template-rows:minmax(0,1fr) auto!important}
