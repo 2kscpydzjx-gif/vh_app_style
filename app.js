@@ -127,7 +127,17 @@ $('#confirmSave').onclick=async()=>{
   selected=[];generatedLookImage=null;localStorage.setItem('vh-current-look','[]');closeSaveModal();updateSelectionUI();toast('Стилізацію збережено');setTimeout(()=>go('saved'),250)
  }catch(e){console.error('save-look',e);toast('Не вдалося зберегти: '+(e?.message||'помилка'))}finally{btn.disabled=false}
 };
-function openSavedLook(l){const ids=Array.isArray(l.product_ids)?l.product_ids:[];selected=ids.map(id=>products.find(p=>p.id===id)).filter(Boolean);generatedLookImage=l.image_url||null;go('look')}
+let activeSavedLook=null;
+function savedLookProducts(l){const ids=Array.isArray(l?.product_ids)?l.product_ids:[];return ids.map(id=>products.find(p=>p.id===id)).filter(Boolean)}
+function openSavedLook(l){
+ activeSavedLook=l;const items=savedLookProducts(l);
+ $('#savedDetailName').textContent=l.name||'Стилізація';$('#savedDetailImage').src=l.image_url||'assets/model/base-look.png';$('#savedDetailCount').textContent=items.length||Number(l.item_count)||0;$('#savedDetailTotal').textContent=money(l.total);
+ const box=$('#savedDetailItems');box.innerHTML='';items.forEach(p=>{const card=document.createElement('button');card.className='savedDetailItem';card.innerHTML=`<img src="${esc(img(p))}" alt="${esc(p.name)}"><span>${esc(p.brand||'VINTAGE')}</span><b>${esc(p.name)}</b><small>${[p.size?('Розмір '+p.size):'',money(p.price)].filter(Boolean).join(' · ')}</small>`;card.onclick=()=>openProductDetail(p);box.appendChild(card)});
+ go('savedDetail')
+}
+$('#savedDetailBack').onclick=()=>go('saved');
+$('#editSavedLook').onclick=()=>{if(!activeSavedLook)return;selected=savedLookProducts(activeSavedLook);generatedLookImage=activeSavedLook.image_url||null;localStorage.setItem('vh-current-look',JSON.stringify(selected.map(x=>x.id)));updateSelectionUI();go('look')};
+$('#deleteSavedLook').onclick=async()=>{if(!activeSavedLook||!confirm('Видалити цю стилізацію?'))return;const{error}=await db.from('saved_looks').delete().eq('id',activeSavedLook.id);if(error)return toast('Не вдалося видалити');activeSavedLook=null;toast('Стилізацію видалено');go('saved')};
 async function renderSaved(){
  const box=$('#savedList');if(!box)return;box.innerHTML='<div class="state">Завантаження…</div>';
  try{
