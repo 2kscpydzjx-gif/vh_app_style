@@ -127,12 +127,13 @@ $('#confirmSave').onclick=async()=>{
   selected=[];generatedLookImage=null;localStorage.setItem('vh-current-look','[]');closeSaveModal();updateSelectionUI();toast('Стилізацію збережено');setTimeout(()=>go('saved'),250)
  }catch(e){console.error('save-look',e);toast('Не вдалося зберегти: '+(e?.message||'помилка'))}finally{btn.disabled=false}
 };
+function openSavedLook(l){const ids=Array.isArray(l.product_ids)?l.product_ids:[];selected=ids.map(id=>products.find(p=>p.id===id)).filter(Boolean);generatedLookImage=l.image_url||null;go('look')}
 async function renderSaved(){
  const box=$('#savedList');if(!box)return;box.innerHTML='<div class="state">Завантаження…</div>';
  try{
   const looks=await loadSavedLooks();box.innerHTML='';if(!looks.length){box.innerHTML='<div class="state">Ще немає збережених стилізацій.</div>';return}
   looks.forEach(l=>{const card=document.createElement('div');card.className='savedCard savedLookCard';card.innerHTML=`<img src="${esc(l.image_url||'assets/model/base-look.png')}" alt=""><div class="savedInfo"><span>ЗБЕРЕЖЕНА СТИЛІЗАЦІЯ</span><b>${esc(l.name)}</b><small>${Number(l.item_count)||0} речей · ${money(l.total)}</small><div class="savedActions"><button class="renameSaved">ЗМІНИТИ НАЗВУ</button><i>·</i><button class="deleteSaved">ВИДАЛИТИ</button></div></div>`;
-   card.querySelector('.renameSaved').onclick=async()=>{const n=prompt('Назва стилізації:',l.name);if(!n?.trim())return;const{error}=await db.from('saved_looks').update({name:n.trim()}).eq('id',l.id);if(error)return toast('Не вдалося перейменувати');renderSaved()};
+   card.addEventListener('click',e=>{if(e.target.closest('.savedActions'))return;openSavedLook(l)});card.querySelector('.renameSaved').onclick=async()=>{const n=prompt('Назва стилізації:',l.name);if(!n?.trim())return;const{error}=await db.from('saved_looks').update({name:n.trim()}).eq('id',l.id);if(error)return toast('Не вдалося перейменувати');renderSaved()};
    card.querySelector('.deleteSaved').onclick=async()=>{if(!confirm('Видалити цю стилізацію?'))return;const{error}=await db.from('saved_looks').delete().eq('id',l.id);if(error)return toast('Не вдалося видалити');renderSaved()};box.appendChild(card)
   })
  }catch(e){console.error('saved-looks',e);box.innerHTML='<div class="state">Помилка завантаження збережених стилізацій.</div>'}
