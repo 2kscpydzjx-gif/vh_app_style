@@ -76,3 +76,6 @@ button{-webkit-tap-highlight-color:transparent}
 .product .image .check::after{content:"";position:absolute;inset:-8px!important;z-index:-1}
 .product:active,.product .image .check:active{transform:none!important;filter:none!important;opacity:1!important}
 .product,.product *{-webkit-tap-highlight-color:transparent!important}
+
+/* Selected quick-add state: keep label readable */
+.product.selected .image .check{display:flex!important;width:auto!important;min-width:max-content!important;height:auto!important;min-height:0!important;padding:6px 8px!important;background:#eadbc5!important;color:#21140d!important;border:1px solid rgba(235,218,194,.75)!important;font:7px/1.1 Georgia,serif!important;letter-spacing:.06em!important;white-space:nowrap!important;opacity:1!important;visibility:visible!important}
