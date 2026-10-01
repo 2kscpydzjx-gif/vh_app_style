@@ -40,7 +40,7 @@ function renderProducts(){
  if(!list.length){grid.innerHTML='<div class="state">У цьому розділі поки немає товарів.</div>';return}
  list.forEach(p=>{const chosen=selected.some(x=>x.id===p.id),b=document.createElement('button');b.className='product '+(chosen?'selected ':'')+(sold(p)?'sold':'');
  b.innerHTML=`<div class="image"><img loading="lazy" src="${esc(img(p))}" alt="${esc(p.name)}">${sold(p)?'<span class="soldBadge">ПРОДАНО</span>':''}<span class="check">${chosen?'ДОДАНО ✓':'ДОДАТИ ДО ОБРАЗУ'}</span></div><b>${esc(p.name)}</b><small>${money(p.price)}</small>${p.brand?`<em>${esc(p.brand)}</em>`:''}`;
- b.onclick=(e)=>{if(e.target.closest('.check'))addProduct(p);else openProductDetail(p)};grid.appendChild(b)})
+ const quickAdd=b.querySelector('.check');quickAdd?.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();addProduct(p)});b.onclick=e=>{if(e.target.closest('.check'))return;openProductDetail(p)};grid.appendChild(b)})
 }
 function openProductDetail(p){
  currentProductDetail=p;
