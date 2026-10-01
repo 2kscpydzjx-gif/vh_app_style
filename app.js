@@ -102,7 +102,7 @@ async function generateLook(){
   const res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json','apikey':window.VH_CONFIG.supabaseKey,'Authorization':'Bearer '+window.VH_CONFIG.supabaseKey},body:JSON.stringify(payload)});
   const raw=await res.text();let data;try{data=JSON.parse(raw)}catch{throw new Error('Edge Function returned HTTP '+res.status)}
   if(!res.ok||!data?.success||!data?.imageUrl)throw new Error(data?.error||('AI HTTP '+res.status));
-  generatedLookImage=data.imageUrl;const preview=$('#lookPreview');if(preview)preview.src=generatedLookImage;toast('AI-образ готовий');
+  generatedLookImage=data.imageUrl;const preview=$('#lookPreview');if(preview){preview.classList.remove('aiRevealed');preview.src=generatedLookImage;requestAnimationFrame(()=>requestAnimationFrame(()=>preview.classList.add('aiRevealed')))}toast('AI-образ готовий');
  }catch(e){console.error('generate-look',e);toast('Помилка AI: '+(e?.message||'невідома'))}
  finally{isGeneratingLook=false;btn.disabled=false;btn.textContent=generatedLookImage?'ЗГЕНЕРУВАТИ ЩЕ РАЗ ✦':'СТВОРИТИ ОБРАЗ НА МОДЕЛІ ✦';stage?.classList.remove('aiLoading')}
 }
