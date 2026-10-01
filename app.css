@@ -126,3 +126,8 @@ button,.product,.savedLookCard,.savedDetailItem{-webkit-tap-highlight-color:tran
 
 /* Pre-generation look state: never show unrelated model clothes */
 .lookPreGenerate{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:38px 30px;background:radial-gradient(circle at 50% 38%,rgba(91,61,43,.34),transparent 42%),linear-gradient(160deg,#21140e,#100a07);z-index:1}.lookPreGenerate[hidden]{display:none!important}.lookPreGenerate>span{font-size:8px;letter-spacing:.22em;color:#c4a071}.lookPreGenerate h3{max-width:290px;margin:12px 0 10px;font:29px/1.03 Georgia;font-weight:400}.lookPreGenerate p{max-width:300px;margin:0;color:#a9917d;font:13px/1.55 Georgia}.lookPreGenerate>b{margin-top:22px;color:#c4a071;font:24px Georgia}.modelStage #lookPreview[hidden],.modelStage #lookPreviewTag[hidden]{display:none!important}
+
+/* Compact fixed look actions above bottom navigation */
+#look{padding-bottom:76px!important}
+.lookAppScreen .lookActions{position:sticky!important;bottom:6px!important;z-index:45!important;display:grid!important;grid-template-columns:1fr 1fr!important;gap:7px!important;margin:10px 10px 0!important;padding:6px!important;background:rgba(18,10,7,.94)!important;backdrop-filter:blur(18px)!important;-webkit-backdrop-filter:blur(18px)!important;border:1px solid rgba(196,160,113,.25)!important;border-radius:14px!important;box-shadow:0 8px 30px rgba(0,0,0,.32)!important}
+.lookAppScreen .lookActions .btn{height:44px!important;margin:0!important;padding:0 8px!important;border-radius:9px!important;font-size:8px!important;letter-spacing:.08em!important;white-space:nowrap!important}
