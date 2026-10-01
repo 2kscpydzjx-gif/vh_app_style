@@ -49,7 +49,7 @@ $('#openLook').onclick=()=>selected.length?go('look'):toast('Додай хоча
 const catalogSearchInput=$('#catalogSearchInput');
 function applyCatalogSearch(){
   const q=(catalogSearchInput?.value||'').trim().toLocaleLowerCase('uk-UA');
-  $('#productGrid .product').forEach(card=>{
+  document.querySelectorAll('#productGrid .product').forEach(card=>{
     const hay=(card.textContent||'').toLocaleLowerCase('uk-UA');
     card.hidden=!!q&&!hay.includes(q);
   });
