@@ -85,7 +85,7 @@ $('#catalogSheetApply')?.addEventListener('click',closeCatalogSheet);
 
 function renderLook(){
  const lookCount=$('#lookCount');if(lookCount)lookCount.textContent=selected.length;
- const preview=$('#lookPreview');if(preview)preview.src=generatedLookImage||'assets/model/base-look.png';const lookTotal=$('#lookTotal');if(lookTotal)lookTotal.textContent=money(selected.reduce((a,p)=>a+Number(p.price||0),0));
+ const preview=$('#lookPreview'),pre=$('#lookPreGenerate'),tag=$('#lookPreviewTag');if(preview){if(generatedLookImage){preview.src=generatedLookImage;preview.hidden=false;if(pre)pre.hidden=true;if(tag)tag.hidden=false}else{preview.removeAttribute('src');preview.hidden=true;if(pre)pre.hidden=false;if(tag)tag.hidden=true}}const lookTotal=$('#lookTotal');if(lookTotal)lookTotal.textContent=money(selected.reduce((a,p)=>a+Number(p.price||0),0));
  const box=$('#lookItems');box.innerHTML='';
  if(!selected.length){box.innerHTML='<div class="state">Образ порожній. Додай речі з каталогу.</div>';return}
  selected.forEach(p=>{const cat=categories.find(c=>c.id===p.category_id),sub=subcategories.find(s=>s.id===p.subcategory_id);const row=document.createElement('div');row.className='lookRow';row.innerHTML=`<img src="${esc(img(p))}" alt="${esc(p.name)}"><div><span>${esc(p.brand||sub?.name||cat?.name||'Vintage')}</span><b>${esc(p.name)}</b><small>${[p.size?('Розмір '+p.size):'',money(p.price)].filter(Boolean).join(' · ')}</small></div><button aria-label="Прибрати річ">×</button>`;row.querySelector('button').onclick=()=>{selected=selected.filter(x=>x.id!==p.id);sync();renderLook()};box.appendChild(row)})
@@ -102,7 +102,7 @@ async function generateLook(){
   const res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json','apikey':window.VH_CONFIG.supabaseKey,'Authorization':'Bearer '+window.VH_CONFIG.supabaseKey},body:JSON.stringify(payload)});
   const raw=await res.text();let data;try{data=JSON.parse(raw)}catch{throw new Error('Edge Function returned HTTP '+res.status)}
   if(!res.ok||!data?.success||!data?.imageUrl)throw new Error(data?.error||('AI HTTP '+res.status));
-  generatedLookImage=data.imageUrl;const preview=$('#lookPreview');if(preview){preview.classList.remove('aiRevealed');preview.src=generatedLookImage;requestAnimationFrame(()=>requestAnimationFrame(()=>preview.classList.add('aiRevealed')))}toast('AI-образ готовий');
+  generatedLookImage=data.imageUrl;const preview=$('#lookPreview'),pre=$('#lookPreGenerate'),tag=$('#lookPreviewTag');if(pre)pre.hidden=true;if(tag)tag.hidden=false;if(preview){preview.hidden=false;preview.classList.remove('aiRevealed');preview.src=generatedLookImage;requestAnimationFrame(()=>requestAnimationFrame(()=>preview.classList.add('aiRevealed')))}toast('AI-образ готовий');
  }catch(e){console.error('generate-look',e);toast('Помилка AI: '+(e?.message||'невідома'))}
  finally{isGeneratingLook=false;btn.disabled=false;btn.textContent=generatedLookImage?'ЗГЕНЕРУВАТИ ЩЕ РАЗ ✦':'СТВОРИТИ ОБРАЗ НА МОДЕЛІ ✦';stage?.classList.remove('aiLoading')}
 }
