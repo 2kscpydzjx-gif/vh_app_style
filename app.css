@@ -181,3 +181,15 @@ button,.product,.savedLookCard,.savedDetailItem{-webkit-tap-highlight-color:tran
 .productDetailMedia #productDetailImage{display:block!important;width:100%!important;height:auto!important;aspect-ratio:1/1!important;object-fit:cover!important;opacity:1!important;visibility:visible!important;background:none!important}
 .productDetailBody{padding:22px 18px 28px!important}
 .productDetailAdd{position:sticky!important;bottom:8px!important;z-index:5!important;height:auto!important;margin-top:0!important;border-radius:0!important}
+
+/* Home app polish */
+#home .heroCopy .btn{min-height:50px;border-radius:9px}
+#home .howGrid article{transition:transform .16s ease,border-color .16s ease}
+#home .homeProduct{border-radius:10px;overflow:hidden;transition:transform .14s ease,opacity .14s ease}
+#home .homeProduct:active{transform:scale(.975);opacity:.9}
+#home .homeProduct img{display:block;border-radius:8px}
+#home .homeLastCard{position:relative;align-items:center;border-radius:12px;padding:10px 38px 10px 10px;transition:transform .14s ease,border-color .16s ease}
+#home .homeLastCard:active{transform:scale(.985)}
+#home .homeLastCard img{border-radius:8px}
+#home .homeLastArrow{position:absolute;right:14px;top:50%;transform:translateY(-50%);font:28px/1 Georgia,serif;color:#c4a071}
+#home .textLink{min-height:34px;padding:6px 0}
