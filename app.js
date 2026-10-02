@@ -50,7 +50,7 @@ function renderProducts(){
 function openProductDetail(p){
  currentProductDetail=p;
  const cat=categories.find(c=>c.id===p.category_id),sub=subcategories.find(s=>s.id===p.subcategory_id);
- $('#productDetailImage').src=img(p);$('#productDetailImage').alt=p.name||'';
+ const detailImage=$('#productDetailImage');const detailUrl=img(p);detailImage.alt=p.name||'';detailImage.src=detailUrl;
  $('#productDetailBrand').textContent=p.brand||'VINTAGE HEDONISTA';
  $('#productDetailName').textContent=p.name||'';
  $('#productDetailPrice').textContent=money(p.price);
