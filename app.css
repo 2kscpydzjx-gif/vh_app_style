@@ -204,3 +204,33 @@ button,.product,.savedLookCard,.savedDetailItem{-webkit-tap-highlight-color:tran
 #lastLookCard .homeLastCard{position:relative;width:100%;text-align:left}
 .homeLastArrow{margin-left:auto;padding-left:8px;font:28px/1 Georgia,serif;color:#c7a06f;opacity:.9}
 #home .sectionHead .textLink{min-height:34px;display:flex;align-items:center}
+
+/* LOOK SCREEN — editorial visual pass; logic untouched */
+.lookAppScreen{background:linear-gradient(180deg,#120a07 0,#160d09 44%,#120a07 100%)!important}
+.lookAppScreen .lookAppHead{padding:18px 18px 14px!important;background:linear-gradient(180deg,rgba(18,10,7,.98),rgba(18,10,7,.9))!important}
+.lookAppScreen .lookAppHead .eyebrow{color:#a98a70!important}
+.lookAppScreen .lookAppHead h2{font-size:28px!important;letter-spacing:-.025em!important}
+.lookAppScreen .modelStage{margin:14px 10px 0!important;border:1px solid rgba(196,160,113,.28)!important;border-radius:2px!important;box-shadow:0 18px 48px rgba(0,0,0,.22)!important}
+.lookAppScreen .lookPreGenerate{min-height:370px!important;padding:58px 30px!important;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:radial-gradient(circle at 50% 38%,rgba(111,71,44,.24),transparent 48%),linear-gradient(180deg,#21140d,#160c08)!important}
+.lookAppScreen .lookPreGenerate>span{font:8px/1 Arial,sans-serif!important;letter-spacing:.2em!important;color:#b79677!important}
+.lookAppScreen .lookPreGenerate h3{max-width:300px;margin:16px auto 10px!important;font:400 30px/1.02 Georgia,serif!important;color:#eadfce!important}
+.lookAppScreen .lookPreGenerate p{max-width:300px;margin:0 auto!important;font-size:11px!important;line-height:1.6!important;color:#9f8977!important}
+.lookAppScreen .lookPreGenerate b{margin-top:28px!important;font:400 19px/1 Georgia,serif!important;color:#c5a178!important}
+.lookAppScreen .lookSummary{margin:0 10px!important;border-width:0 1px 1px!important;border-color:rgba(196,160,113,.22)!important;border-radius:0!important;background:#170d09!important}
+.lookAppScreen .lookSummary>div{padding:12px 16px!important}
+.lookAppScreen .lookSummary>div+div{border-left:1px solid rgba(196,160,113,.16)!important}
+.lookAppScreen .lookSectionHead{margin-top:24px!important;padding:0 12px 10px!important}
+.lookAppScreen .lookSectionHead>span{font:8px/1 Arial,sans-serif!important;letter-spacing:.18em!important;color:#a98a70!important}
+.lookAppScreen .lookSectionHead>button{font-size:8px!important;letter-spacing:.12em!important}
+.lookAppScreen .lookItems{padding:0 10px!important;gap:6px!important}
+.lookAppScreen .lookRow{grid-template-columns:76px 1fr 32px!important;gap:12px!important;padding:7px!important;border-color:rgba(196,160,113,.17)!important;border-radius:2px!important;background:#180e09!important}
+.lookAppScreen .lookRow img{width:76px!important;height:76px!important;border-radius:0!important}
+.lookAppScreen .lookRow>button{border:0!important;border-radius:0!important;font-size:20px!important}
+.lookAppScreen .aiBox{position:relative;margin:26px 10px 0!important;padding:25px 18px 20px!important;border:1px solid rgba(196,160,113,.3)!important;border-radius:2px!important;background:radial-gradient(circle at 100% 0,rgba(139,91,54,.2),transparent 45%),#1a100b!important;overflow:hidden}
+.lookAppScreen .aiBox:before{content:"✦";position:absolute;right:16px;top:13px;color:#9d795a;font:16px Georgia,serif}
+.lookAppScreen .aiBox>span{font-size:8px!important;letter-spacing:.19em!important;color:#b79677!important}
+.lookAppScreen .aiBox h2{max-width:290px;margin:8px 0 9px!important;font:400 27px/1.05 Georgia,serif!important}
+.lookAppScreen .aiBox p{max-width:320px;font-size:11px!important;line-height:1.55!important;color:#9f8977!important}
+.lookAppScreen #generateLook{height:49px!important;border-radius:0!important;margin-top:4px!important}
+.lookAppScreen .lookActions{grid-template-columns:1fr 1fr!important;gap:8px!important;margin:10px 10px 22px!important;padding:0!important;border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+.lookAppScreen .lookActions .btn{height:46px!important;border-radius:0!important}
