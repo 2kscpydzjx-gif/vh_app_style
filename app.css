@@ -166,3 +166,7 @@ button,.product,.savedLookCard,.savedDetailItem{-webkit-tap-highlight-color:tran
 .productDetailMeta{margin:0 0 18px!important;border-top:0!important}.productDetailMeta div{min-height:42px;align-items:center;padding:10px 0!important;border-bottom:1px solid rgba(196,160,113,.16)!important}.productDetailMeta span{font-size:7px!important}.productDetailMeta b{max-width:68%;font-size:12px!important}
 .productDetailAdd{position:relative!important;bottom:auto!important;z-index:1!important;height:48px!important;margin-top:6px!important;border-radius:9px!important;font-size:8px!important;letter-spacing:.11em!important}
 .productDetailAdd:not(:disabled):active{transform:scale(.98)!important}
+
+/* Product detail image: preserve original square product photo */
+.productDetailMedia{min-height:0!important}
+.productDetailMedia #productDetailImage{display:block!important;width:100%!important;height:auto!important;aspect-ratio:1/1!important;object-fit:contain!important;object-position:center!important;opacity:1!important;visibility:visible!important;background:#1a0f0a!important}
