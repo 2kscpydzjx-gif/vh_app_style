@@ -174,3 +174,10 @@ button,.product,.savedLookCard,.savedDetailItem{-webkit-tap-highlight-color:tran
 /* Product detail media fallback lives on the container */
 #productDetailMedia{aspect-ratio:1/1!important;background-size:contain!important;background-position:center!important;background-repeat:no-repeat!important}
 #productDetailMedia #productDetailImage{width:100%!important;height:100%!important;object-fit:contain!important;background:transparent!important}
+
+/* Product detail rollback to last known working layout */
+.productDetailScreen .productDetailTop{display:grid!important}
+.productDetailMedia{position:relative!important;margin:0!important;min-height:0!important;aspect-ratio:auto!important;background:#1a0f0a!important;background-image:none!important}
+.productDetailMedia #productDetailImage{display:block!important;width:100%!important;height:auto!important;aspect-ratio:1/1!important;object-fit:cover!important;opacity:1!important;visibility:visible!important;background:none!important}
+.productDetailBody{padding:22px 18px 28px!important}
+.productDetailAdd{position:sticky!important;bottom:8px!important;z-index:5!important;height:auto!important;margin-top:0!important;border-radius:0!important}
