@@ -170,3 +170,7 @@ button,.product,.savedLookCard,.savedDetailItem{-webkit-tap-highlight-color:tran
 /* Product detail image: preserve original square product photo */
 .productDetailMedia{min-height:0!important}
 .productDetailMedia #productDetailImage{display:block!important;width:100%!important;height:auto!important;aspect-ratio:1/1!important;object-fit:contain!important;object-position:center!important;opacity:1!important;visibility:visible!important;background:#1a0f0a!important}
+
+/* Product detail media fallback lives on the container */
+#productDetailMedia{aspect-ratio:1/1!important;background-size:contain!important;background-position:center!important;background-repeat:no-repeat!important}
+#productDetailMedia #productDetailImage{width:100%!important;height:100%!important;object-fit:contain!important;background:transparent!important}
