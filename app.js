@@ -50,7 +50,7 @@ function renderProducts(){
 function openProductDetail(p,sourceImage=null){
  currentProductDetail=p;
  const cat=categories.find(c=>c.id===p.category_id),sub=subcategories.find(s=>s.id===p.subcategory_id);
- const detailImage=$('#productDetailImage');const detailUrl=sourceImage?.currentSrc||sourceImage?.src||img(p);detailImage.alt=p.name||'';detailImage.src=detailUrl;
+ const detailImage=$('#productDetailImage');const detailUrl=sourceImage?.currentSrc||sourceImage?.src||img(p);detailImage.alt=p.name||'';detailImage.style.backgroundImage=`url("${String(detailUrl).replace(/"/g,'%22')}")`;detailImage.style.backgroundSize='contain';detailImage.style.backgroundPosition='center';detailImage.style.backgroundRepeat='no-repeat';detailImage.src=detailUrl;
  $('#productDetailBrand').textContent=p.brand||'VINTAGE HEDONISTA';
  $('#productDetailName').textContent=p.name||'';
  $('#productDetailPrice').textContent=money(p.price);
