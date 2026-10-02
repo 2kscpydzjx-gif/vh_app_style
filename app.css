@@ -193,3 +193,14 @@ button,.product,.savedLookCard,.savedDetailItem{-webkit-tap-highlight-color:tran
 #home .homeLastCard img{border-radius:8px}
 #home .homeLastArrow{position:absolute;right:14px;top:50%;transform:translateY(-50%);font:28px/1 Georgia,serif;color:#c4a071}
 #home .textLink{min-height:34px;padding:6px 0}
+
+/* Homepage app polish */
+#home .heroCopy .btn,#home .textLink,#home .homeProduct,#home .homeLastCard{touch-action:manipulation}
+#home .homeProduct{transition:transform .14s ease,opacity .14s ease}
+#home .homeProduct:active{transform:scale(.975);opacity:.9}
+#home .homeProduct img{transition:transform .35s ease}
+@media (hover:hover){#home .homeProduct:hover img{transform:scale(1.025)}}
+#lastLookHome{padding-bottom:22px}
+#lastLookCard .homeLastCard{position:relative;width:100%;text-align:left}
+.homeLastArrow{margin-left:auto;padding-left:8px;font:28px/1 Georgia,serif;color:#c7a06f;opacity:.9}
+#home .sectionHead .textLink{min-height:34px;display:flex;align-items:center}
