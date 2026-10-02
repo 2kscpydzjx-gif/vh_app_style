@@ -45,18 +45,12 @@ function renderProducts(){
  if(!list.length){grid.innerHTML='<div class="state">У цьому розділі поки немає товарів.</div>';return}
  list.forEach(p=>{const chosen=selected.some(x=>x.id===p.id),b=document.createElement('button');b.className='product '+(chosen?'selected ':'')+(sold(p)?'sold':'');
  b.dataset.productId=p.id;b.innerHTML=`<div class="image"><img loading="lazy" src="${esc(img(p))}" alt="${esc(p.name)}">${sold(p)?'<span class="soldBadge">ПРОДАНО</span>':''}<span class="check">${chosen?'ДОДАНО ✓':'ДОДАТИ ДО ОБРАЗУ'}</span></div><b>${esc(p.name)}</b><small>${money(p.price)}</small>${p.brand?`<em>${esc(p.brand)}</em>`:''}`;
- const quickAdd=b.querySelector('.check');quickAdd?.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();addProduct(p)});b.onclick=e=>{if(e.target.closest('.check'))return;const source=b.querySelector('.image img');openProductDetail(p,source?.currentSrc||source?.src||img(p))};grid.appendChild(b)})
+ const quickAdd=b.querySelector('.check');quickAdd?.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();addProduct(p)});b.onclick=e=>{if(e.target.closest('.check'))return;openProductDetail(p)};grid.appendChild(b)})
 }
-function openProductDetail(p,detailUrl=''){
+function openProductDetail(p){
  currentProductDetail=p;
  const cat=categories.find(c=>c.id===p.category_id),sub=subcategories.find(s=>s.id===p.subcategory_id);
- const media=$('#productDetailMedia'),detailImage=$('#productDetailImage'),url=detailUrl||img(p);
- detailImage.alt=p.name||'';
- detailImage.src=url;
- media.style.backgroundImage='url('+JSON.stringify(url)+')';
- media.style.backgroundSize='contain';
- media.style.backgroundPosition='center';
- media.style.backgroundRepeat='no-repeat';
+ $('#productDetailImage').src=img(p);$('#productDetailImage').alt=p.name||'';
  $('#productDetailBrand').textContent=p.brand||'VINTAGE HEDONISTA';
  $('#productDetailName').textContent=p.name||'';
  $('#productDetailPrice').textContent=money(p.price);
