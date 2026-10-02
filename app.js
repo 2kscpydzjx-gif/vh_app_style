@@ -153,14 +153,14 @@ async function renderSaved(){
  }catch(e){console.error('saved-looks',e);box.innerHTML='<div class="state">Помилка завантаження збережених стилізацій.</div>'}
 }
 async function allProducts(){let out=[],from=0,size=1000;while(true){const{data,error}=await db.from('products').select('id,name,slug,price,old_price,category_id,subcategory_id,size,color,material,condition,brand,status,stock,cover_image,created_at').eq('status','published').order('created_at',{ascending:false}).range(from,from+size-1);if(error)throw error;out.push(...(data||[]));if((data||[]).length<size)break;from+=size}return out}
-async function load(){try{const cfg=window.VH_CONFIG;if(!cfg?.supabaseUrl||!cfg?.supabaseKey||!window.supabase)throw new Error('Не знайдено конфігурацію Supabase');db=window.supabase.createClient(cfg.supabaseUrl,cfg.supabaseKey);const[c,s,p]=await Promise.all([db.from('categories').select('id,name,slug,sort_order,is_active').eq('is_active',true).order('sort_order'),db.from('subcategories').select('id,category_id,name,slug,sort_order').order('sort_order'),allProducts()]);if(c.error)throw c.error;if(s.error)throw s.error;categories=c.data||[];subcategories=s.data||[];products=p||[];restore();renderCatalog()}catch(e){console.error(e);$('#productGrid').innerHTML=`<div class="state">Помилка завантаження:<br>${esc(e.message)}</div>`;toast('Не вдалося завантажити каталог')}}
+async function load(){try{const cfg=window.VH_CONFIG;if(!cfg?.supabaseUrl||!cfg?.supabaseKey||!window.supabase)throw new Error('Не знайдено конфігурацію Supabase');db=window.supabase.createClient(cfg.supabaseUrl,cfg.supabaseKey);const[c,s,p]=await Promise.all([db.from('categories').select('id,name,slug,sort_order,is_active').eq('is_active',true).order('sort_order'),db.from('subcategories').select('id,category_id,name,slug,sort_order').order('sort_order'),allProducts()]);if(c.error)throw c.error;if(s.error)throw s.error;categories=c.data||[];subcategories=s.data||[];products=p||[];restore();renderCatalog();renderHomeEditorial()}catch(e){console.error(e);$('#productGrid').innerHTML=`<div class="state">Помилка завантаження:<br>${esc(e.message)}</div>`;toast('Не вдалося завантажити каталог')}}
 load();
-async function renderHomeEditorial(){
+async async function renderHomeEditorial(){
  const hp=document.querySelector('#homeProducts');
  if(hp&&Array.isArray(products)){
   hp.innerHTML='';
   const pool=products.filter(p=>!sold(p));
-  for(let i=pool.length-1;i>0;i--){const k=Math.floor(Math.random()*(i+1));[pool[i],pool[k]]=[pool[k],pool[i]]}
+  for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]]}
   pool.slice(0,3).forEach(p=>{
    const b=document.createElement('button');b.className='homeProduct';
    b.innerHTML=`<img loading="lazy" src="${esc(img(p))}" alt="${esc(p.name)}"><b>${esc(p.name)}</b><small>${money(p.price)}</small>`;
